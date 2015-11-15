@@ -1,0 +1,7 @@
+{"_id":{"$oid":"5647efffa4c06b853bb97d9a"},"name":"beth","age":22.0,"postal":10510.0,"gender":1.0}
+{"_id":{"$oid":"5647f00fa4c06b853bb97d9b"},"name":"itai","age":12.0,"postal":12401.0,"gender":0.0}
+{"_id":{"$oid":"5647f029a4c06b853bb97d9c"},"name":"eric","age":56.0,"postal":13902.0,"gender":0.0}
+{"_id":{"$oid":"5648bbd09c5238a2004f926f"},"name":"jack","age":15.0,"postal":13902.0,"gender":0.0}
+{"_id":{"$oid":"5648bbea9c5238a2004f9270"},"name":"jenny","age":67.0,"postal":13902.0,"gender":1.0}
+{"_id":{"$oid":"5648bbfc9c5238a2004f9271"},"name":"mary","age":40.0,"postal":13902.0,"gender":1.0}
+{"_id":{"$oid":"5648bc1e9c5238a2004f9272"},"name":"bob","age":37.0,"postal":13902.0,"gender":0.0}
