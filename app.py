@@ -1,7 +1,7 @@
 #! /usr/bin/python
 from flask import Flask, request, render_template, url_for
 from pymongo import MongoClient
-import bson
+import bson, json
 from flask.ext.headers import headers
 
 app = Flask(__name__)
@@ -72,6 +72,38 @@ def display_poll(poll_id):
                 break
     return render_template('poll.html', data=q)
 
+@app.route("/stats/<string:poll_id>")
+@headers({'Access-Control-Allow-Origin':'*', 'Content-Type':'application/json'})
+def poll_stats(poll_id):
+    #poll = question!!
+    poll_id = bson.objectid.ObjectId(poll_id)
+    q = [q for q in questions.find({'_id': poll_id})]
+    v = [v for v in votes.find({'user': userId, 'question' : poll_id })]
+    u = [u for u in users.find({})]
+    u_dict = {}
+    for user in u:
+      u_dict[user["_id"]] = user
+
+    d = {}
+    d["n_yes"] = d["n_no"] = d["n_women_yes"] = d["n_men_yes"] = \
+        d["n_women_no"] = d["n_men_no"] = 0
+    for vote in v:
+      #0=no, 1=yes
+      gender = u_dict[vote["user"]]["gender"]
+      if gender == 0: #boi
+        if (vote["answer"] == 0):
+          d["n_men_no"] += 1
+        else:
+          d["n_men_yes"] += 1
+      elif gender == 1: #gurl
+        if (vote["answer"] == 0):
+          d["n_women_no"] += 1
+        else:
+          d["n_women_yes"] += 1
+
+    return json.dumps(d)
+
+
 @app.route("/poll/<string:poll_id>", methods=["POST", "OPTIONS"])
 @headers({'Access-Control-Allow-Origin':'*'})
 def cast_vote(poll_id):
@@ -87,3 +119,5 @@ def cast_vote(poll_id):
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=True)
+    #poll_stats("5647f050a4c06b853bb97d9d")
+
