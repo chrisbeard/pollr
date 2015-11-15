@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Pollr Main{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+
+{% block header %}
+<div class"main-title-div">
+	<a href="/"><h1 class="main-title">pollr.us</h1></a>
+</div>
+{% endblock %}
+
+{% block content %}
+  {% if data %}
+	{% for poll in data %}
+		<div class="poll">
+			<div class="vote-div">
+		  	{% if poll['vote'] == 1 %}
+					<div class="vote-button selected" id={{ poll['_id'] }}-1 onclick="vote(this.id)"><i class="fa fa-hand-o-up vote"></i></div>
+			  	<div class="vote-button" id={{ poll['_id'] }}-0 onclick="vote(this.id)"><i class="fa fa-hand-o-down vote"></i></div>
+				{% elif poll['vote'] == 0 %}
+					<div class="vote-button" id={{ poll['_id'] }}-1 onclick="vote(this.id)"><i class="fa fa-hand-o-up vote"></i></div>
+			  	<div class="vote-button selected" id={{ poll['_id'] }}-0 onclick="vote(this.id)"><i class="fa fa-hand-o-down vote"></i></div>
+				{% else %}
+			  	<div class="vote-button" id={{ poll['_id'] }}-1 onclick="vote(this.id)"><i class="fa fa-hand-o-up vote"></i></div>
+			  	<div class="vote-button" id={{ poll['_id'] }}-0 onclick="vote(this.id)"><i class="fa fa-hand-o-down vote"></i></div>
+				{% endif %}
+		  </div>
+			<div class="poll-div">
+				<div class="poll-title">{{ poll['question'] }}</div>
+				<div class="poll-cat">[{{ poll['poll'] }}]</div>
+			</div>
+			<div class="charts">
+				<canvas id="myChart" width="400" height="400"></canvas>
+			</div>
+		</div>
+	{% endfor %}
+	<script>
+	function vote(poll_id) {
+		if ($('#' + poll_id).hasClass('selected')) {
+			return;
+		}
+		$('#' + poll_id).addClass('selected');
+		id = poll_id.split("-")
+		other_poll_id = id[0] + "-" + (id[1] === "0" ? 1 : 0);
+		$('#' + other_poll_id).removeClass('selected');
+		$.post("http://localhost:5000/poll/" + poll_id)
+	};
+	function loadcharts() {
+		console.log("hi")
+		// var ctx = document.getElementById("myChart").getContext("2d");
+		// var myNewChart = new Chart(ctx).PolarArea(data);
+	};
+	loadcharts();
+	</script>
+	{% else %}
+	  <p>There are no polls right now :(</p>
+	{% endif %}
+{% endblock %}

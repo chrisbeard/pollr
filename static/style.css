@@ -1,0 +1,94 @@
+body {
+    background: #fcfcf1;
+}
+
+.main-title-div {
+}
+.main-title {
+	color: #34495e;
+	font-family: 'Eczar', serif;
+	font-size: 2em;
+	font-weight: 700;
+	padding: 1em 0 1em 0;
+	margin: 0 auto;
+	text-align: center;
+}
+a {
+	color: inherit;
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: none;
+}
+
+#content {
+	max-width: 720px;
+	margin: 0 auto;
+}
+
+.tally {
+	font-size: 1.2em;
+	text-align: left;
+	display: inline-block;
+	margin: 1em auto;
+	font-weight: 700; 
+}
+.tally-num {
+	color: #3498db;
+}
+.keyword {
+	color: #3498db;
+	font-style: italic;
+}
+
+.search-bar-div {
+	text-align: right;
+	display: inline-block;
+	float: right;
+}
+.form-control {
+	font-size: 1em;
+}
+
+
+.poll {
+	padding: 1em 0 1em 0;
+	font-family: 'Eczar', serif;
+	font-weight: 400;
+	font-size: 1.2em;
+}
+
+.vote-div {
+	display: inline-block;
+	margin-right: 1em;
+}
+.vote-button {
+	display: inline-block;
+}
+.vote {
+	margin: 0em 2px 0em 2px;
+	padding: 5px;
+	border: 1px solid #dfdfdf;
+	border-radius: 30px;
+}
+.selected {
+	color: #3498db;
+}
+
+.poll-div {
+	margin-top: -20px;
+	display: inline-block;
+}
+.poll-title {
+	font-size: 1.1em;
+	display: inline-block;
+}
+.poll-cat {
+	color: #7f8c8d;
+	display: inline-block;
+}
+
+.footer {
+	padding: 0 auto;
+	text-align: center;
+}
