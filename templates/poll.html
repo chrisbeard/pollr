@@ -6,54 +6,138 @@
 
 {% block header %}
 <div class"main-title-div">
-	<a href="/"><h1 class="main-title">pollr.us</h1></a>
+  <a href="/"><h1 class="main-title">pollr.us</h1></a>
 </div>
 {% endblock %}
 
 {% block content %}
   {% if data %}
-	{% for poll in data %}
-		<div class="poll">
-			<div class="vote-div">
-		  	{% if poll['vote'] == 1 %}
-					<div class="vote-button selected" id={{ poll['_id'] }}-1 onclick="vote(this.id)"><i class="fa fa-hand-o-up vote"></i></div>
-			  	<div class="vote-button" id={{ poll['_id'] }}-0 onclick="vote(this.id)"><i class="fa fa-hand-o-down vote"></i></div>
-				{% elif poll['vote'] == 0 %}
-					<div class="vote-button" id={{ poll['_id'] }}-1 onclick="vote(this.id)"><i class="fa fa-hand-o-up vote"></i></div>
-			  	<div class="vote-button selected" id={{ poll['_id'] }}-0 onclick="vote(this.id)"><i class="fa fa-hand-o-down vote"></i></div>
-				{% else %}
-			  	<div class="vote-button" id={{ poll['_id'] }}-1 onclick="vote(this.id)"><i class="fa fa-hand-o-up vote"></i></div>
-			  	<div class="vote-button" id={{ poll['_id'] }}-0 onclick="vote(this.id)"><i class="fa fa-hand-o-down vote"></i></div>
-				{% endif %}
-		  </div>
-			<div class="poll-div">
-				<div class="poll-title">{{ poll['question'] }}</div>
-				<div class="poll-cat">[{{ poll['poll'] }}]</div>
-			</div>
-			<div class="charts">
-				<canvas id="myChart" width="400" height="400"></canvas>
-			</div>
-		</div>
-	{% endfor %}
-	<script>
-	function vote(poll_id) {
-		if ($('#' + poll_id).hasClass('selected')) {
-			return;
-		}
-		$('#' + poll_id).addClass('selected');
-		id = poll_id.split("-")
-		other_poll_id = id[0] + "-" + (id[1] === "0" ? 1 : 0);
-		$('#' + other_poll_id).removeClass('selected');
-		$.post("http://localhost:5000/poll/" + poll_id)
-	};
-	function loadcharts() {
-		console.log("hi")
-		// var ctx = document.getElementById("myChart").getContext("2d");
-		// var myNewChart = new Chart(ctx).PolarArea(data);
-	};
-	loadcharts();
-	</script>
-	{% else %}
-	  <p>There are no polls right now :(</p>
-	{% endif %}
+  {% for poll in data %}
+    <div class="poll">
+      <div class="poll-div">
+        <div class="poll-title"><i class="fa fa-caret-right"></i> {{ poll['question'] }}
+        <span class="poll-cat">[{{ poll['poll'] }}]</span>
+        </div>
+      </div>
+      <div class="vote-div">
+      {% if poll['vote'] == 1 %}
+        <div class="vote-button selected" id={{ poll['_id'] }}-1 onclick="vote(this.id)"><i class="fa fa-hand-o-up vote"></i></div>
+        <div class="vote-button" id={{ poll['_id'] }}-0 onclick="vote(this.id)"><i class="fa fa-hand-o-down vote"></i></div>
+      {% elif poll['vote'] == 0 %}
+        <div class="vote-button" id={{ poll['_id'] }}-1 onclick="vote(this.id)"><i class="fa fa-hand-o-up vote"></i></div>
+        <div class="vote-button selected" id={{ poll['_id'] }}-0 onclick="vote(this.id)"><i class="fa fa-hand-o-down vote"></i></div>
+      {% else %}
+        <div class="vote-button" id={{ poll['_id'] }}-1 onclick="vote(this.id)"><i class="fa fa-hand-o-up vote"></i></div>
+        <div class="vote-button" id={{ poll['_id'] }}-0 onclick="vote(this.id)"><i class="fa fa-hand-o-down vote"></i></div>
+      {% endif %}
+      </div>
+      <div class="charts">
+        <div class="chart">
+          <div class="chart-title">Male</div>
+          <canvas class="pie-chart" id="malePie" width="200" height="200"></canvas>
+        </div>
+        <div class="chart">
+          <div class="chart-title">Female</div>
+          <canvas class="pie-chart" id="femalePie" width="200" height="200"></canvas>
+        </div>
+        <div class="chart">
+          <div class="chart-title">By Age</div>
+          <canvas class="bar-chart" id="ageBar" width="700" height="300"></canvas>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+  <script>
+  function vote(poll_id) {
+    if ($('#' + poll_id).hasClass('selected')) {
+      return;
+    }
+    $('#' + poll_id).addClass('selected');
+    id = poll_id.split("-")
+    other_poll_id = id[0] + "-" + (id[1] === "0" ? 1 : 0);
+    $('#' + other_poll_id).removeClass('selected');
+    $.post("http://localhost:5000/poll/" + poll_id)
+    poll_id = window.location.href.split('/');
+    poll_id = poll_id[poll_id.length - 1];
+    $.get("http://localhost:5000/stats/" + poll_id, loadcharts);
+  };
+  function loadcharts(data) {
+    console.log(data)
+
+    var male_data = [
+      {
+        value: data['n_men_yes'],
+        color: "#46BFBD",
+        highlight: "#5AD3D1",
+        label: "Agree"
+      },
+      {
+        value: data['n_men_no'],
+        color:"#F7464A",
+        highlight: "#FF5A5E",
+        label: "Disagree"
+      }
+    ]
+    var ctx = document.getElementById("malePie").getContext("2d");
+    var malePieChar = new Chart(ctx).Pie(male_data);
+
+    var female_data = [
+      {
+        value: data['n_women_yes'],
+        color: "#46BFBD",
+        highlight: "#5AD3D1",
+        label: "Agree"
+      },
+      {
+        value: data['n_women_no'],
+        color:"#F7464A",
+        highlight: "#FF5A5E",
+        label: "Disagree"
+      }
+    ]
+    var ctx = document.getElementById("femalePie").getContext("2d");
+    var femalePieChart = new Chart(ctx).Pie(female_data);
+
+    var ages = ["1-10", "11-20", "21-30", "31-40", "41-50", "51-60", "61-70", "71-80", "81-90", "91-100"];
+    var bar_agree = []
+    for (var i = 0; i < ages.length; ++i) {
+        bar_agree.push(data["age-yes"][ages[i]])
+    }
+    var bar_disagree = []
+    for (var i = 0; i < ages.length; ++i) {
+        bar_disagree.push(data["age-no"][ages[i]])
+    }
+
+    var bar_data = {
+        labels: ages,
+        datasets: [
+            {
+                label: "Agree",
+                fillColor: "rgba(70,191,189,0.5)",
+                strokeColor: "rgba(70,191,189,0.8)",
+                highlightFill: "rgba(90,211,209,0.75)",
+                highlightStroke: "rgba(90,211,209,1)",
+                data: bar_agree
+            },
+            {
+                label: "Disagree",
+                fillColor: "rgba(247,70,74,0.5)",
+                strokeColor: "rgba(247,70,74,0.8)",
+                highlightFill: "rgba(255,90,94,0.75)",
+                highlightStroke: "rgba(255,90,94,1)",
+                data: bar_disagree
+            }
+        ]
+    };
+    var ctx = document.getElementById("ageBar").getContext("2d");
+    var ageBarChart = new Chart(ctx).Bar(bar_data);
+    Chart.defaults.global['animation'] = false;
+  };
+  poll_id = window.location.href.split('/');
+  poll_id = poll_id[poll_id.length - 1];
+  $.get("http://localhost:5000/stats/" + poll_id, loadcharts);
+  </script>
+  {% else %}
+    <p>There are no polls right now :(</p>
+  {% endif %}
 {% endblock %}

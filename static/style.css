@@ -21,6 +21,13 @@ a:hover {
 	text-decoration: none;
 }
 
+#spacer {
+	max-width: 720px;
+	margin: 0 auto;
+	border-top: 1px solid;
+	padding-bottom: 1em;
+	color: #7f8c8d;
+}
 #content {
 	max-width: 720px;
 	margin: 0 auto;
@@ -76,8 +83,7 @@ a:hover {
 }
 
 .poll-div {
-	margin-top: -20px;
-	display: inline-block;
+	max-width: 650px;
 }
 .poll-title {
 	font-size: 1.1em;
@@ -86,6 +92,20 @@ a:hover {
 .poll-cat {
 	color: #7f8c8d;
 	display: inline-block;
+}
+
+.charts {
+	text-align: center;
+	padding-top: 3em;
+	padding-bottom: 3em;
+}
+
+.chart {
+	display: inline-block;
+	padding: 2em 0 2em 0;
+}
+.pie-chart {
+	margin: 0 2em 0 2em;
 }
 
 .footer {

@@ -27,6 +27,12 @@
 	</div>
 	{% for poll in data %}
 		<div class="poll">
+			<span class="poll-div">
+		  	<a href=/{{ poll['_id'] }}>
+				<div class="poll-title"><i class="fa fa-angle-right"></i> {{ poll['question'] }}</a>
+					<div class="poll-cat">[{{ poll['poll'] }}]</div>
+				</div>
+			</span>
 			<div class="vote-div">
 				{% if poll['vote'] == 1 %}
 					<div class="vote-button selected" id={{ poll['_id'] }}-1 onclick="vote(this.id)"><i class="fa fa-hand-o-up vote"></i></div>
@@ -39,12 +45,7 @@
 			  	<div class="vote-button" id={{ poll['_id'] }}-0 onclick="vote(this.id)"><i class="fa fa-hand-o-down vote"></i></div>
 				{% endif %}
 		  </div>
-		  <div class="poll-div">
-		  	<a href=/{{ poll['_id'] }}>
-				<div class="poll-title">{{ poll['question'] }}</div>
-				</a>
-				<div class="poll-cat">[{{ poll['poll'] }}]</div>
-			</div>
+		  
 		</div>
 	{% endfor %}
 	<script>
